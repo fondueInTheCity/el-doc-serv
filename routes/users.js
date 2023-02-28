@@ -1,9 +1,8 @@
 var express = require('express');
+const db = require('../services/PostDB')
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', db.getUsers);
 
 module.exports = router;
