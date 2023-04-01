@@ -27,8 +27,12 @@ app.use(allowCrossDomain);
 app.use('/api/users', usersRouter);
 app.use('/api/files', filesRouter)
 app.use('/api/auth', authRouter)
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || err.status || 500)
+    .json(err.message)
+})
 
-db.sequelize.sync({force: true})
+db.sequelize.sync({ force: true })
   .then(() => {
     initial()
     console.log("Synced db.");
@@ -37,21 +41,21 @@ db.sequelize.sync({force: true})
     console.log("Failed to sync db: ", err.message);
   });
 
-  function initial() {
-    Role.create({
-      id: 1,
-      name: "user"
-    });
-   
-    Role.create({
-      id: 2,
-      name: "moderator"
-    });
-   
-    Role.create({
-      id: 3,
-      name: "admin"
-    });
-  }
+function initial() {
+  Role.create({
+    id: 1,
+    name: "user"
+  });
+
+  Role.create({
+    id: 2,
+    name: "moderator"
+  });
+
+  Role.create({
+    id: 3,
+    name: "admin"
+  });
+}
 
 module.exports = app;

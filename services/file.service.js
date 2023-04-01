@@ -3,13 +3,12 @@ const db = require("../models");
 const File = db.files
 const Op = db.Sequelize.Op;
 
-const showUserFiles = async (userId, res) => {
-    await File.findAll({ where: { ownerId: userId } }).then((files) => {
-        res.status(200).json(files)
-    });
+const showUserFiles = async (userId) => {
+    throw { message: "Error" }
+    return await File.findAll({ where: { ownerId: userId } })
 }
 
-const uploadUserFile = async (ownerId, fileName, res) => {
+const uploadUserFile = async (ownerId, fileName) => {
     try {
         await sftpService.put(ownerId, fileName)
 
@@ -20,31 +19,20 @@ const uploadUserFile = async (ownerId, fileName, res) => {
         };
 
         await File.create(file)
-            .then(() => {
-                res.status(200).json({
-                    message: "Ok."
-                })
-            })
-            .catch(err => {
-                res.status(500).json({
-                    message: err.message || "Some error occurred while upload user file."
-                })
-            });
-    } catch {
+    } catch (err) {
         // await sftpService.deleteFile()
+        throw err
     }
 }
 
-const showFileById = async (fileId, res) => {
-    await File.findOne({ where: { id: fileId } }).then((file) => {
-        res.status(200).send(file)
-    })
+const showFileById = async (fileId) => {
+    return await File.findOne({ where: { id: fileId } })
 }
 
 const downloadFile = async (fileId, res) => {
     await File.findOne({ where: { id: fileId } }).then(async (file) => {
         await sftpService.downloadFile(file.ownerId, file.name, res)
-    })    
+    })
 }
 
 module.exports = {

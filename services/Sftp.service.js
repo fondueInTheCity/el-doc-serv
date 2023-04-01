@@ -70,14 +70,16 @@ const listFiles = async (req, res) => {
   }
 }
 
-const createDirectory = async (path, res) => {
+const createDirectory = async (path) => {
   try {
     await connect()
     await sftp.mkdir(path) 
+
     console.log("Directory created on SFTP server");
   } catch (err) {
     console.log("Failed to create directory!", err);
-    res.status(500).send({ message: err.message })
+    
+    throw err
   } finally {
     await disconnect()
   }
