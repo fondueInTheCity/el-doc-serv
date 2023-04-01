@@ -7,7 +7,7 @@ const client = new Client({
     password: 'root',
     port: 32771
   });
-  // client.connect();
+  client.connect();
    
   
 const getUsers = (request, response) => {

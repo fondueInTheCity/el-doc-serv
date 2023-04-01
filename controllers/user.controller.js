@@ -1,60 +1,24 @@
 const db = require("../models");
-const User = db.users;
 const Op = db.Sequelize.Op;
+const userService = require('../services/user.service')
 
-exports.create = (req, res) => {
-    if (!req.body.email) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
-        return;
-    }
+const getUserProfile = (req, res) => {
+    const id = +req.params.id;
+    const idCondition = id ? { id: { [Op.eq]: `${id}` }} : null
 
-    // Create a Tutorial
-    const user = {
-        email: req.body.email,
-        password: req.body.password
-    };
+    userService.addUserFile(idCondition, res)
+}
 
-    // Save Tutorial in the database
-    User.create(user)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Tutorial."
-            });
-        });
-};
+exports.addUserFile = (req, res) => {
+    userService.addUserFile(req.params.id, req.file.originalname)
+    console.log(req.params.id, req.file.originalname)
+    console.log(req.file, req.body)
+    res.status(200).send({
+        message: "Ok."
+    })
+    return
+}
 
-exports.findAll = (req, res) => {
-    const email = req.query.email;
-    var condition = email ? { title: { [Op.like]: `%${title}%` } } : null;
-
-    User.findAll({ where: condition })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving tutorials."
-            });
-        });
-};
-
-exports.findAllByParametrs = (req, res) => {
-    req.
-    Tutorial.findAll({ where: { published: true } })
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving tutorials."
-        });
-      });
-  };
+module.exports = {
+    getUserProfile
+}

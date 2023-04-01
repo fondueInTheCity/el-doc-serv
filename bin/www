@@ -6,7 +6,15 @@
 
 var app = require('../app');
 var debug = require('debug')('el-doc-ser:server');
-var http = require('http');
+const fs = require('fs');
+const https = require('https');
+
+var key = fs.readFileSync('C:/Users/fando/certs/selfsigned.key');
+var cert = fs.readFileSync('C:/Users/fando/certs/selfsigned.crt');
+var options = {
+  key: key,
+  cert: cert
+};
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +27,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.

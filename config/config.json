@@ -1,0 +1,18 @@
+{
+  "local": {
+    "username": "fando",
+    "password": "root",
+    "database": "el_doc",
+    "host": "localhost",
+    "dialect": "postgres",
+    "port": 32768
+   },
+  "test": {
+    "username": "fando",
+    "password": "root",
+    "database": "el_doc_test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "port": 32768
+   }
+}
