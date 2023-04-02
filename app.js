@@ -32,9 +32,9 @@ app.use((err, req, res, next) => {
     .json(err.message)
 })
 
-db.sequelize.sync({ force: true })
+db.sequelize.sync()
   .then(() => {
-    initial()
+    // initial()
     console.log("Synced db.");
   })
   .catch((err) => {

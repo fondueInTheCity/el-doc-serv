@@ -1,5 +1,6 @@
 const Client = require('ssh2-sftp-client');
 const sftpConfig = require("../config/sftp.config.js");
+const fs = require('fs')
 const sftp = new Client();
 
 const putConfig = {
@@ -97,19 +98,21 @@ const deleteFile = async (path) => {
   }
 }
 
-const downloadFile = async (ownerId, fileName, res) => {
+const downloadFile = async (ownerId, fileName) => {
+  const remotePath = `/upload/users/${ownerId}/${fileName}`
+
   try {
     await connect()
 
-    const remotePath = `/upload/users/${ownerId}/${fileName}`;
-    let dst = fs.createWriteStream('./public/' + fileName);
+    let dst = fs.createWriteStream('./public/' + fileName)
 
-    await sftp.get(remotePath, dst).then((file) => {
-      res.status(200).download(file)
-      console.log(`Get file ${path} from SFTP server`)
-    })
+    const file = await sftp.get(remotePath, dst)
+    
+    console.log(`Get file ${remotePath} from SFTP server`)
+
+    return file
   } catch (err) {
-    console.log(`Failed get file ${path} from SFTP server!`, err)
+    console.log(`Failed get file ${remotePath} from SFTP server!`, err)
   } finally {
     await disconnect()
   }

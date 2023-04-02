@@ -3,9 +3,7 @@ const controller = require('../controllers/auth.controller')
 const express = require('express');
 const router = express.Router()
 
-router.post('/signup', (req, res) => {
-  controller.signUp(req, res)
-})
+router.post('/signup', controller.signUp)
 
 router.post('/signin', controller.signIn)
 

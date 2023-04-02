@@ -4,7 +4,6 @@ const File = db.files
 const Op = db.Sequelize.Op;
 
 const showUserFiles = async (userId) => {
-    throw { message: "Error" }
     return await File.findAll({ where: { ownerId: userId } })
 }
 
@@ -29,10 +28,10 @@ const showFileById = async (fileId) => {
     return await File.findOne({ where: { id: fileId } })
 }
 
-const downloadFile = async (fileId, res) => {
-    await File.findOne({ where: { id: fileId } }).then(async (file) => {
-        await sftpService.downloadFile(file.ownerId, file.name, res)
-    })
+const downloadFile = async (fileId) => {
+    const file = await File.findOne({ where: { id: fileId } })
+
+    return await sftpService.downloadFile(file.ownerId, file.name)
 }
 
 module.exports = {
